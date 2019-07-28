@@ -1,0 +1,11 @@
+{
+  "name": "oh-gee",
+  "version": "0.0.1",
+  "private": true,
+  "devDependencies": {
+    "shadow-cljs": "2.8.41"
+  },
+  "dependencies": {
+    "gl-matrix": "^3.0.0"
+  }
+}
