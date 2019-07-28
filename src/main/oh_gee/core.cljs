@@ -29,8 +29,8 @@
   void main(void) {
   vec3 pos;
   pos = aVertexPosition;
-  pos.x = pos.x + sin(frame * pos.y * 0.1);
-  pos.y = pos.y + sin(frame * pos.x * 0.00005);
+  pos.x = pos.x + 50.0 * sin(frame * pos.y * 0.08);
+  //pos.y = pos.y + sin(frame * pos.x * 0.00005);
   gl_Position = uPMatrix * uMVMatrix * vec4(pos, 1.0);
   //vColor = aVertexColor;
   }
@@ -47,8 +47,8 @@
    void main() {
      vec3 pos = vec3(gl_PointCoord.xy, 0);
      float f = frame;
-     float a = pow(sin(50.0 * pos.y) * sin(50.0 * pos.x), 2.0) + pow(sin(frame * 0.3), 2.0) + 0.1;
-     gl_FragColor.r = a;
+     float a = 0.5; //pow(sin(50.0 * pos.y) * sin(50.0 * pos.x), 2.0) + pow(sin(frame * 0.3), 2.0) + 0.1;
+     gl_FragColor.r = sin(pos.x * 4.1) * sin(pos.y * 4.1);
      gl_FragColor.g = a;
      gl_FragColor.b = a;
      gl_FragColor.a = 1.0;
@@ -59,17 +59,15 @@
 (def shader (shaders/create-program gl
                                     (shaders/create-shader gl shader/vertex-shader vertex-shader-source)
                                     (shaders/create-shader gl shader/fragment-shader fragment-shader-source)))
+(def parts 10000)
 (def vertex-buffer (buffers/create-buffer gl (ta/float32
                                                (flatten
-                                                 (for [i (range 100)]
-                                                   (mapv #(if (not= % 0.0)
-                                                            (+ (/ i 10.0) %)
-                                                            %)
-                                                   [1.0 1.0 0.0
-                                                    -1.0 1.0 0.0
-                                                    1.0 -1.0 0.0
-                                                    -1.0 -1.0 0.0]
-                                                   )
+                                                 (for [i (range parts)
+                                                       :let [a (/ i 100)]]
+                                                   [1.0 (+ 1.0 a) 0.0
+                                                    -1.0 (+ 1.0 a) 0.0
+                                                    1.0 (+ -1.0 a) 0.0
+                                                    -1.0 (+ -1.0 a) 0.0]
                                                    ))
                                                )
                                           buffer-object/array-buffer
@@ -82,11 +80,9 @@
 ;;                                      buffer-object/static-draw)
 (def element-buffer (buffers/create-buffer gl (ta/unsigned-int16
                                                 (flatten
-                                                  (for [i (range 100)]
+                                                  (for [i (range parts)]
                                                     (mapv (partial + (* i 4))
-                                                    [0 1 2 2 1 3]
-                                                    )
-                                                    ))
+                                                          [0 1 2 2 1 3])))
                                                 )
                                            buffer-object/element-array-buffer
                                            buffer-object/static-draw))
@@ -101,7 +97,7 @@
                                    )
                               dt)
                             last-dt)
-        triangles-count (* 6 100)]
+        triangles-count (* 6 parts)]
     (-> gl
         (buffers/clear-color-buffer 0 0 0 1)
         (buffers/draw! :shader shader
@@ -124,7 +120,7 @@
                         {:name "w" :type :float :values (ta/float32 [w])}
                         {:name "h" :type :float :values (ta/float32 [h])}
                         {:name "uPMatrix" :type :mat4 :values (common/get-perspective-matrix gl)}
-                        {:name "uMVMatrix" :type :mat4 :values (common/get-position-matrix [-5.5 -3.0 -10.0])}
+                        {:name "uMVMatrix" :type :mat4 :values (common/get-position-matrix [-5.5 -50.0 -100.0])}
                         ]
 
                        :element-array
