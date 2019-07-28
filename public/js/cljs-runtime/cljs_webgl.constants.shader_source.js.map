@@ -1,0 +1,1 @@
+{"version":3,"sources":["cljs_webgl/constants/shader_source.cljs"],"mappings":";;AAEA,AAAA,AAAKA","names":["cljs-webgl.constants.shader-source/compile-status"],"sourcesContent":["(ns cljs-webgl.constants.shader-source)\n\n(def compile-status 0x8B81)\n"]}

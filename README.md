@@ -1,1 +1,6 @@
-`npx shadow-cljs watch main` - to start the thing.
+# oh-gee
+## Demo
+https://fenoloftaleina.github.io/oh-gee/public/
+## Dev
+Start a shadow-cljs watcher:
+```npx shadow-cljs watch main```

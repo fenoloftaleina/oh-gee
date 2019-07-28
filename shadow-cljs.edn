@@ -13,4 +13,5 @@
  :builds
  {:main
   {:target :browser
-   :modules {:main {:init-fn oh-gee.core/init}}}}}
+   :modules {:main {:init-fn oh-gee.core/init}}
+   :build-hooks [(cljs-webgl.build-fixer/go)]}}}
